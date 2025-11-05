@@ -1,0 +1,1944 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قائمة الطعام الإلكترونية -  مطاعم مارب</title>
+    <meta name="description" content="قائمة طعام إلكترونية فاخرة تضم أشهى الأطباق من جميع الأصناف">
+    <meta name="theme-color" content="#667eea">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preload" href="style.css" as="style">
+    <link rel="preload" href="script.js" as="script">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>🍽️ طاولتك</h2>
+            <button id="closeSidebar" class="close-btn">&times;</button>
+        </div>
+        <div class="sidebar-content">
+            <div class="sidebar-item" onclick="closeSidebarAndGoHome()">
+                <i class="fas fa-home"></i>
+                <span>الصفحة الرئيسية</span>
+            </div>
+            <div class="sidebar-item" onclick="openRating()">
+                <i class="fas fa-star"></i>
+                <span>تقييمك</span>
+            </div>
+            <div class="sidebar-item" onclick="showWorkingHours()">
+                <i class="fas fa-clock"></i>
+                <span>أوقات العمل</span>
+            </div>
+            <div class="sidebar-item" onclick="showAboutUs()">
+                <i class="fas fa-info-circle"></i>
+                <span>نبذة عنا</span>
+            </div>
+            <div class="sidebar-item" onclick="openLocation()">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>الموقع</span>
+            </div>
+            <div class="social-links">
+                <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
+                <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/966500000000" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            </div>
+            <div class="sidebar-item dropdown-item developer-info-small" onclick="toggleDeveloperInfo()">
+                <i class="fas fa-code"></i>
+                <span>المصمم</span>
+                <i class="fas fa-chevron-down dropdown-arrow" id="developerArrow"></i>
+            </div>
+            <div class="developer-dropdown" id="developerDropdown">
+                <div class="developer-info-detailed">
+                    <div class="developer-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <h4>شعيشع محمد</h4>
+                    <p class="developer-title">مطور مواقع ومصمم UI/UX</p>
+                    <div class="developer-contact">
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>
+                                7654 321 05 669+
+                            </span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>shuaisha10@gmail.com</span>
+                        </div>
+                        
+                    </div>
+                    <div class="developer-social">
+                        <a href="https://wa.me/966590681513" target="_blank" class="social-btn whatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div id="overlay" class="overlay" onclick="closeSidebar()"></div>
+
+    <header>
+        <div class="header-top">
+            <button id="menuBtn" class="menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h1>🍽️ قائمة طعام مطعم مأرب للاكلات الشعبية </h1>
+            <div class="header-actions">
+                <button id="searchBtn" class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Search Bar -->
+        <div id="searchBar" class="search-bar hidden">
+            <input type="text" id="searchInput" placeholder="ابحث في القائمة...">
+            <button id="clearSearch" class="clear-search">&times;</button>
+        </div>
+
+        <!-- Categories Dropdown -->
+        <!-- <div id="categoriesDropdown" class="categories-dropdown hidden"> 
+             <div class="category-item" data-category="breakfast">
+                <span>🍳 قائمة الفطور </span>
+                <span class="count">6</span>
+            </div>
+            <div class="category-item" data-category="hot-appetizers">
+                <span>🔥 قائمة الغداء</span>
+                <span class="count">6</span>
+            </div>
+            <div class="category-item" data-category="cold-appetizers">
+                <span>🧊  قائمة المعصوب</span>
+                <span class="count">6</span>
+            </div>
+            <div class="category-item" data-category="salads">
+                <span>🥗 السلطات</span>
+                <span class="count">6</span>
+            </div>
+            <div class="category-item" data-category="soups">
+                <span>🍲 الشوربات</span>
+                <span class="count">6</span>
+            </div> 
+             <div class="category-item" data-category="eastern">
+                <span>🍛 الأطباق الشرقية</span>
+                <span class="count">6</span>
+            </div>
+            <div class="category-item" data-category="western">
+                <span>🍝 الأطباق الغربية</span>
+                <span class="count">6</span>
+            </div>
+            <div class="category-item" data-category="grills">
+                <span>🔥 المشاوي</span>
+                <span class="count">6</span>
+            </div>
+            <div class="category-item" data-category="seafood">
+                <span>🐟 المأكولات البحرية</span>
+                <span class="count">6</span>
+            </div>
+             <div class="category-item" data-category="pasta">
+                <span>🍝 الباستا</span>
+                <span class="count">6</span>
+            </div>
+            <div class="category-item" data-category="pizza">
+                <span>🍕 البيتزا</span>
+                <span class="count">6</span>
+            </div>
+            <div class="category-item" data-category="sandwiches">
+                <span>🥪 السندويتشات</span>
+                <span class="count">6</span>
+            </div>
+            <div class="category-item" data-category="kids-meals">
+                <span>👶 وجبات الأطفال</span>
+                <span class="count">6</span>
+            </div>
+            <div class="category-item" data-category="crepes">
+                <span>🥞 الكريب</span>
+                <span class="count">6</span>
+            </div>
+            <div class="category-item" data-category="waffles">
+                <span>🧇 الوافل</span>
+                <span class="count">6</span>
+            </div>
+            <div class="category-item" data-category="cakes">
+                <span>🍰 قطع الكيك</span>
+                <span class="count">6</span>
+            </div>
+            <div class="category-item" data-category="fruit-salads">
+                <span>🍓 سلطات الفواكه</span>
+                <span class="count">6</span>
+            </div> 
+             <div class="category-item" data-category="hot-drinks">
+                <span>☕ المشروبات الساخنة</span>
+                <span class="count">6</span>
+            </div>
+            <div class="category-item" data-category="cold-drinks">
+                <span>🥤 المشروبات الباردة</span>
+                <span class="count">6</span>
+            </div>
+            
+        </div> -->
+
+        <!-- Breakfast Categories Dropdown -->
+        <div id="breakfastDropdown" class="breakfast-dropdown hidden">
+            <div class="breakfast-category-item" data-category="breakfast">
+                <span>🍳 فطور عربي تقليدي</span>
+            </div>
+            <div class="breakfast-category-item" data-category="breakfast">
+                <span>🥞 فطور صحي متكامل</span>
+            </div>
+            <div class="breakfast-category-item" data-category="breakfast">
+                <span>🧈 فطور شامي أصيل</span>
+            </div>
+            <div class="breakfast-category-item" data-category="breakfast">
+                <span>🍳 بيض مقلي بالطماطم</span>
+            </div>
+            <div class="breakfast-category-item" data-category="breakfast">
+                <span>🫘 فول مدمس بالطحينة</span>
+            </div>
+            <div class="breakfast-category-item" data-category="breakfast">
+                <span>🫓 منقوشة زعتر وجبن</span>
+            </div>
+        </div>
+
+        <nav>
+            <ul>
+                <!-- <li>
+                    <button id="categoriesBtn" class="categories-btn" onclick="toggleCategoriesDropdown()">
+                        <i class="fas fa-list"></i>
+                        <span>الأصناف</span>
+                    </button>
+                </li> -->
+                <li><a href="#breakfast">🍳 قائمة الفطور</a></li>
+                <li><a href="#hot-appetizers">  قائمة الغداء</a></li>
+                <li><a href="#cold-appetizers"> قائمة المعصوب</a></li>
+                <li><a href="#salads"> قائمة المطبق</a></li>
+                <li><a href="#soups"> قائمة التميس</a></li>
+                <li><a href="#eastern"> قائمة الخبز</a></li>
+                <li><a href="#western"> قائمة السلطة</a></li>
+                <li><a href="#grills"> المشروبات الساخنة</a></li>
+                <li><a href="#seafood">المشروبات الباردة</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Breakfast Section -->
+        <section id="breakfast" class="category">
+            <h2>🍳 قائمة الفطور </h2>
+            <div class="items-grid">
+                <div class="menu-item">
+                    <img src="images/breakfast/z5.jpg" alt="كبدة  بلدي ">
+                    <h3>كبدة بلدي   </h3>
+                    <span class="price">18 RS</span>
+                </div>
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/a7.jpeg" alt="كبدة بلدي شيدر">
+                    <h3>كبدة بلدي جبن شيدر  </h3>
+                    <span class="price">18 RS</span>
+                </div>
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/9.jpeg" alt="فطور عربي تقليدي">
+                    <h3>كبدة مستورد  </h3>
+                    <span class="price">25 RS</span>
+                </div>
+
+ <div class="menu-item">
+                    <img src="images/breakfast/11.png" alt="فطور عربي تقليدي">
+                    <h3>كبدة مع حمص   </h3>
+                    <span class="price">21 RS</span>
+                </div>
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/12.jpeg" alt="فطور عربي تقليدي">
+                    <h3>  تقاطيع جبن  </h3>
+                    <span class="price">18 RS</span>
+                </div>
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/13.jpeg" alt="فطور عربي ">
+                    <h3>  تقاطيع   </h3>
+                    <span class="price">16 RS</span>
+                </div>
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/14.png" alt="فطور عربي ">
+                    <h3>  لحم مقلقل   </h3>
+                    <span class="price">16 RS</span>
+                </div>
+
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/20.jpg" alt="فطور عربي ">
+                    <h3>  لحم مقلقل جبن  </h3>
+                    <span class="price">18 RS</span>
+                </div>
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/21.jpg" alt="فطور عربي ">
+                    <h3>  لحم  مفروم  </h3>
+                    <span class="price">15 RS</span>
+                </div>
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/22.png" alt="فطور عربي ">
+                    <h3>    شكشوكة  </h3>
+                    <span class="price">10 RS</span>
+                </div>
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/23.jpeg" alt="فطور عربي ">
+                    <h3>    شكشوكة جبن شيدر </h3>
+                    <span class="price">13 RS</span>
+                </div>
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/1112.jpg" alt="فطور عربي ">
+                    <h3>     لحسة </h3>
+                    <span class="price">13 RS</span>
+                </div>
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/1114.jpg" alt="فطور عربي ">
+                    <h3>     بيض عيون </h3>
+                    <span class="price">9 RS</span>
+                </div>
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/27.png" alt="فطور عربي ">
+                    <h3>     بيض فرن </h3>
+                    <span class="price">10 RS</span>
+                </div>
+
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/28.jpg" alt="فطور عربي ">
+                    <h3>     بيض فرن جبن سائل</h3>
+                    <span class="price">13 RS</span>
+                </div>
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/01.jpg" alt="فطور عربي ">
+                    <h3>     بيض  جبن شيدر</h3>
+                    <span class="price">13 RS</span>
+                </div>
+
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/4545.png" alt="فطور عربي ">
+                    <h3>     بيض مقلي  </h3>
+                    <span class="price">9 RS</span>
+                </div>
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/32.png" alt="فطور عربي ">
+                    <h3>      تونة  </h3>
+                    <span class="price">12 RS</span>
+                </div>
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/33.jpg" alt="فطور عربي ">
+                    <h3>      تونة جبن </h3>
+                    <span class="price">15 RS</span>
+                </div>
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/x1.jpg" alt="فطور عربي ">
+                    <h3>      تونة لحم مفروم </h3>
+                    <span class="price">14 RS</span>
+                </div>
+
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/44.jpg" alt="فطور عربي ">
+                    <h3>      تونة بيض  </h3>
+                    <span class="price">15 RS</span>
+                </div>
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/45.jpg" alt="فطور عربي ">
+                    <h3>       فول طاوه  </h3>
+                    <span class="price">9 RS</span>
+                </div>
+
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/46.jpg" alt="فطور عربي ">
+                    <h3>       فول مخصوص  </h3>
+                    <span class="price">9 RS</span>
+                </div>
+
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/48.jpg" alt="فطور عربي ">
+                    <h3>       فول فخار  </h3>
+                    <span class="price">10 RS</span>
+                </div>
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/x2.jpg" alt="فطور عربي ">
+                    <h3>       فول لحم مفروم  </h3>
+                    <span class="price">12 RS</span>
+                </div>
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/55.jpg" alt="فطور عربي ">
+                    <h3>       فول قلابة   </h3>
+                    <span class="price">9 RS</span>
+                </div>
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/56.jpg" alt="فطور عربي ">
+                    <h3>       فول بيض   </h3>
+                    <span class="price">12 RS</span>
+                </div>
+
+
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/80.jpg" alt="فطور عربي ">
+                    <h3>       فول تونة   </h3>
+                    <span class="price">12 RS</span>
+                </div>
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/60.png" alt="فطور عربي ">
+                    <h3>       فول فاصوليا   </h3>
+                    <span class="price">11 RS</span>
+                </div>
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/62.jpg" alt="فطور عربي ">
+                    <h3>   فول جره   </h3>
+                    <span class="price">8 RS</span>
+                </div>
+
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/h1.jpg" alt="فطور عربي ">
+                    <h3>   خويشة    </h3>
+                    <span class="price">15 RS</span>
+                </div>
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/100.png" alt="فطور عربي ">
+                    <h3>   فاصوليا    </h3>
+                    <span class="price">10 RS</span>
+                </div>
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/95.jpg" alt="فطور عربي ">
+                    <h3>   فاصوليا بيض   </h3>
+                    <span class="price">12 RS</span>
+                </div>
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/x3.jpg" alt="فطور عربي ">
+                    <h3>   فاصوليا تونة   </h3>
+                    <span class="price">12 RS</span>
+                </div>
+
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/97.jpg" alt="فطور عربي ">
+                    <h3>   فاصوليا فخار   </h3>
+                    <span class="price">11 RS</span>
+                </div>
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/99.jpg" alt="فطور عربي ">
+                    <h3>   فاصوليا بازيلا تونة   </h3>
+                    <span class="price">13 RS</span>
+                </div>
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/100.png" alt="فطور عربي ">
+                    <h3>   فاصوليا حمراء    </h3>
+                    <span class="price">12 RS</span>
+                </div>
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/101.png" alt="فطور عربي ">
+                    <h3>   بازيلا     </h3>
+                    <span class="price">10 RS</span>
+                </div>
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/101 (2).png" alt="فطور عربي ">
+                    <h3>   بازيلا تونة     </h3>
+                    <span class="price">12 RS</span>
+                </div>
+ 
+
+ <div class="menu-item">
+                    <img src="images/breakfast/111.jpg" alt="فطور عربي ">
+                    <h3>   بازيلا بيض     </h3>
+                    <span class="price">12 RS</span>
+                </div>
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/200.jpg" alt="فطور عربي ">
+                    <h3>   عدس      </h3>
+                    <span class="price">11 RS</span>
+                </div>
+
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/222.jpg" alt="فطور عربي ">
+                    <h3>   عدس  مع البيض    </h3> 
+                    <span class="price">11 RS</span>
+                </div>
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/230.jpg" alt="فطور عربي ">
+                    <h3>   عدس   تونة    </h3>
+                    <span class="price">11 RS</span>
+                </div>
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/302.jpg" alt="فطور عربي ">
+                    <h3>   عدس   فول    </h3>
+                    <span class="price">9 RS</span>
+                </div>
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/301.jpg" alt="فطور عربي ">
+                    <h3>   عدس   لحم    </h3>
+                    <span class="price">12 RS</span>
+                </div>
+
+
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/303.jpg" alt="فطور عربي ">
+                    <h3>   شربة   كبير    </h3>
+                    <span class="price">6 RS</span>
+                </div>
+
+
+
+ <div class="menu-item">
+                    <img src="images/breakfast/304.jpg" alt="فطور عربي ">
+                    <h3>   شربة   صغير    </h3>
+                    <span class="price">3 RS</span>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </section>
+
+        <!-- Hot Appetizers Section -->
+        <section id="hot-appetizers" class="category">
+            <h2>🔥 قائمة الغداء</h2>
+            <div class="items-grid">
+                <div class="menu-item">
+                    <img src="images/hot_appetizers/555.jpg" alt="كبة مقلية">
+                    <h3>  لحم مزموم</h3>
+                    <span class="price">120 RS</span>
+                </div>
+                <div class="menu-item">
+                    <img src="images/hot_appetizers/556.jpg" alt="سمبوسك">
+                    <h3> لحم مندي</h3>
+                    <span class="price">90 RS</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/hot_appetizers/557.jpg" alt="فطائر سبانخ">
+                    <h3> برمة لحم</h3>
+                    <span class="price">65 RS</span>
+                </div>
+                <div class="menu-item">
+                    <img src="images/hot_appetizers/559.jpg" alt="أقراص كبة">
+                    <h3>  حنيذ لحم</h3>
+                    <span class="price">65 RS</span>
+                </div>
+                <div class="menu-item">
+                    <img src="images/hot_appetizers/z11.jpg" alt="جبن مقلي">
+                    <h3>مضغوط لحم  </h3>
+                    <span class="price">65 RS</span>
+                </div>
+                <div class="menu-item">
+                    <img src="images/hot_appetizers/z55.jpg" alt="كفتة مشوية">
+                    <h3>  عقدة لحم</h3>
+                    <span class="price">65 RS</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/hot_appetizers/s1.jpg" alt="كفتة مشوية">
+                    <h3>  زربيان لحم</h3>
+                    <span class="price">65 RS</span>
+                </div>
+
+
+
+
+                <div class="menu-item">
+                    <img src="images/hot_appetizers/3.jpg" alt="كفتة مشوية">
+                    <h3>  فتة لحم</h3>
+                    <span class="price">65 RS</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/hot_appetizers/5.jpg" alt="كفتة مشوية">
+                    <h3>  فتة لحوح لحم</h3>
+                    <span class="price">65 RS</span>
+                </div>
+
+
+
+
+                <div class="menu-item">
+                    <img src="images/hot_appetizers/8.jpg" alt="كفتة مشوية">
+                    <h3>  فحسة برمة  </h3>
+                    <span class="price">65 RS</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/hot_appetizers/9.jpg" alt="كفتة مشوية">
+                    <h3>  فحسة لحم صنعاني  </h3>
+                    <span class="price">30 RS</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/hot_appetizers/12.png" alt="كفتة مشوية">
+                    <h3>   سمك شعري بالكيلو   </h3>
+                    <span class="price">80 RS</span>
+                </div>
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/13.jpg" alt="كفتة مشوية">
+                    <h3>   سمك كنعد بالكيلو   </h3>
+                    <span class="price">100 RS</span>
+                </div>
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/14.jpg" alt="كفتة مشوية">
+                    <h3>   سمك مقلي بالكيلو   </h3>
+                    <span class="price">100 RS</span>
+                </div>
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/16.jpg" alt="كفتة مشوية">
+                    <h3>   سمك سلمون بالكيلو   </h3>
+                    <span class="price">100 RS</span>
+                </div>
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/17.jpg" alt="كفتة مشوية">
+                    <h3>     سلتة صنعاني   </h3>
+                    <span class="price">17 RS</span>
+                </div>
+
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/18.jpg" alt="كفتة مشوية">
+                    <h3>     سلتة تونة   </h3>
+                    <span class="price">23 RS</span>
+                </div>
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/20.jpg" alt="كفتة مشوية">
+                    <h3>     سلتة مع فحسة   </h3>
+                    <span class="price">25 RS</span>
+                </div>
+
+
+
+
+
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/31.jpg" alt="كفتة مشوية">
+                    <h3>    دجاج مضغوط     </h3>
+                    <span class="price">نصف 23 حبه 45</span>
+                </div>
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/332.jpg" alt="كفتة مشوية">
+                    <h3>    دجاج مندي     </h3>
+                    <span class="price">ربع 12 نصف 20 حبه 40</span>
+                </div>
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/333.jpg" alt="كفتة مشوية">
+                    <h3>    دجاج شوايه     </h3>
+                    <span class="price">ربع 12 نصف 20 حبه 40</span>
+                </div>
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/334.jpg" alt="كفتة مشوية">
+                    <h3>    دجاج مسلوق     </h3>
+                    <span class="price">ربع 12 نصف 20 حبه 40</span>
+                </div>
+
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/441.png" alt="كفتة مشوية">
+                    <h3>    دجاج مدفون     </h3>
+                    <span class="price">نصف 20 حبه 40</span>
+                </div>
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/442.jpg" alt="كفتة مشوية">
+                    <h3>    دجاج زربيان     </h3>
+                    <span class="price">نصف 23 حبه 45</span>
+                </div>
+
+
+
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/443.jpg" alt="كفتة مشوية">
+                    <h3>    دجاج مظبي     </h3>
+                    <span class="price">نصف 23 حبه 45</span>
+                </div>
+
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/444.jpg" alt="كفتة مشوية">
+                    <h3>    دجاج فحم     </h3>
+                    <span class="price">نصف 23 حبه 45</span>
+                </div>
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/z2.jpg" alt="كفتة مشوية">
+                    <h3>    دجاج مقلوبة     </h3>
+                    <span class="price">نصف 25 حبه 50</span>
+                </div>
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/22.jpg" alt="كفتة مشوية">
+                    <h3>     سلتة خضار    </h3>
+                    <span class="price">15 RS</span>
+                </div>
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/446.jpg" alt="كفتة مشوية">
+                    <h3>    دجاج فحم سادة      </h3>
+                    <span class="price">نصف 15 حبه 30</span>
+                </div>
+
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/4545.jpeg" alt="كفتة مشوية">
+                    <h3>    دجاج  سادة      </h3>
+                    <span class="price">ربع 8 نصف 14 حبه 28</span>
+                </div>
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/z4.jpg" alt="كفتة مشوية">
+                    <h3>     عقدة دجاج     </h3>
+                    <span class="price">44 RS</span>
+                </div>
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/26.png" alt="كفتة مشوية">
+                    <h3>      قلابة سمك     </h3>
+                    <span class="price">25 RS</span>
+                </div>
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/30.jpg" alt="كفتة مشوية">
+                    <h3>       مرقوق لحم     </h3>
+                    <span class="price">30 SR</span>
+                </div>
+
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/50.jpg" alt="كفتة مشوية">
+                    <h3>       مرقوق دجاج     </h3>
+                    <span class="price">15 SR</span>
+                </div>
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/x2.jpg" alt="كفتة مشوية">
+                    <h3>       لحوح سادة     </h3>
+                    <span class="price">6 SR</span>
+                </div>
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/53.jpg" alt="كفتة مشوية">
+                    <h3>       فتة لحوح     </h3>
+                    <span class="price">12 SR</span>
+                </div>
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/54.png" alt="كفتة مشوية">
+                    <h3>       فتة مرق     </h3>
+                    <span class="price">8 SR</span>
+                </div>
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/55.png" alt="كفتة مشوية">
+                    <h3>       عصيد مع مرق     </h3>
+                    <span class="price">8 SR</span>
+                </div>
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/x5.jpg" alt="كفتة مشوية">
+                    <h3>       عصيد مع عسل     </h3>
+                    <span class="price">8 SR</span>
+                </div>
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/59.jpg" alt="كفتة مشوية">
+                    <h3>       عصيد مع لبن     </h3>
+                    <span class="price">10 SR</span>
+                </div>
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/69.png" alt="كفتة مشوية">
+                    <h3>       مشكل فرن       </h3>
+                    <span class="price">8 SR</span>
+                </div>
+
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/1110.jpg" alt="كفتة مشوية">
+                    <h3>       مشكل عادي       </h3>
+                    <span class="price">8 SR</span>
+                </div>
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/65.png" alt="كفتة مشوية">
+                    <h3>       ملوخية        </h3>
+                    <span class="price">8 SR</span>
+                </div>
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/70.png" alt="كفتة مشوية">
+                    <h3>       مكرونة        </h3>
+                    <span class="price">7 SR</span>
+                </div>
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/75.png" alt="كفتة مشوية">
+                    <h3>       مسقعة        </h3>
+                    <span class="price">8 SR</span>
+                </div>
+
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/76.png" alt="كفتة مشوية">
+                    <h3>       شعيرية        </h3>
+                    <span class="price">7 SR</span>
+                </div>
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/111.jpg" alt="كفتة مشوية">
+                    <h3>       ملوخية دجاج        </h3>
+                    <span class="price">14 SR</span>
+                </div>
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/112.png" alt="كفتة مشوية">
+                    <h3>       باميه دجاج        </h3>
+                    <span class="price">14 SR</span>
+                </div>
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/z1.jpg" alt="كفتة مشوية">
+                    <h3>       باميه         </h3>
+                    <span class="price">8 SR</span>
+                </div>
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/120.jpg" alt="كفتة مشوية">
+                    <h3>       باميه  مع الملوخية       </h3>
+                    <span class="price">9 SR</span>
+                </div>
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/116.jpg" alt="كفتة مشوية">
+                    <h3>         فتة مرق مخصوص        </h3>
+                    <span class="price">15 SR</span>
+                </div>
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/130.jpg" alt="كفتة مشوية">
+                    <h3>         حلبه كبير          </h3>
+                    <span class="price">5 SR</span>
+                </div>
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/131.jpg" alt="كفتة مشوية">
+                    <h3>         حلبه صغير          </h3>
+                    <span class="price">3 SR</span>
+                </div>
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/01.jpg" alt="كفتة مشوية">
+                    <h3>         ربع دجاج سادة           </h3>
+                    <span class="price">8 SR</span>
+                </div>
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/02.jpg" alt="كفتة مشوية">
+                    <h3>         زربيان سمك              </h3>
+                    <span class="price">27 SR</span>
+                </div>
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/04.png" alt="كفتة مشوية">
+                    <h3>         فتة دجاج               </h3>
+                    <span class="price">13 SR</span>
+                </div>
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/06.jpg" alt="كفتة مشوية">
+                    <h3>         مرق صغير                </h3>
+                    <span class="price">2 SR</span>
+                </div>
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/dd1.jpg" alt="كفتة مشوية">
+                    <h3>         مرق كبير                </h3>
+                    <span class="price">5 SR</span>
+                </div>
+
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/21.jpg" alt="كفتة مشوية">
+                    <h3>         رز شعبي                 </h3>
+                    <span class="price">8 SR</span>
+                </div>
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/223.jpg" alt="كفتة مشوية">
+                    <h3>         رز بخاري                 </h3>
+                    <span class="price">8 SR</span>
+                </div>
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/224.png" alt="كفتة مشوية">
+                    <h3>         رز مندي                 </h3>
+                    <span class="price">8 SR</span>
+                </div>
+
+
+  <div class="menu-item">
+                    <img src="images/hot_appetizers/225.jpg" alt="كفتة مشوية">
+                    <h3>         رز زربيان سادة                 </h3>
+                    <span class="price">8 SR</span>
+                </div>
+
+
+
+
+            </div>
+        </section>
+
+        <!-- Cold Appetizers Section -->
+        <section id="cold-appetizers" class="category">
+            <h2>🧊  قائمة المعصوب</h2>
+            <div class="items-grid">
+                <div class="menu-item">
+                    <img src="images/cold_appetizers/1.jpg" alt="قائمة المعصوب ">
+                    <h3> عريكة ملكي</h3>
+                    <span class="price">21 SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/cold_appetizers/2.jpg" alt="قائمة المعصوب ">
+                    <h3> عريكة دخن عادي</h3>
+                    <span class="price">16 SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/cold_appetizers/3.jpg" alt="قائمة المعصوب ">
+                    <h3> عريكة  </h3>
+                    <span class="price">16 SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/cold_appetizers/4.jpg" alt=" قائمة المعصوب">
+                    <h3> عريكة دبل </h3>
+                    <span class="price">21 SR</span>
+                </div>
+
+
+
+
+
+                <div class="menu-item">
+                    <img src="images/cold_appetizers/7.jpg" alt=" قائمة المعصوب">
+                    <h3> عريكة كاجو </h3>
+                    <span class="price"> دبل 25  عادي 20</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/cold_appetizers/11110.jpg" alt=" قائمة المعصوب">
+                    <h3> عريكة   مكسرات </h3>
+                    <span class="price">  24 SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/cold_appetizers/114.jpg" alt=" قائمة المعصوب">
+                    <h3> معصوب ملكي بالجبن    </h3>
+                    <span class="price">  16 SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/cold_appetizers/91.jpg" alt=" قائمة المعصوب">
+                    <h3> معصوب ملكي     </h3>
+                    <span class="price">  15 SR</span>
+                </div>
+ 
+
+
+                <div class="menu-item">
+                    <img src="images/cold_appetizers/117.jpg" alt=" قائمة المعصوب">
+                    <h3> معصوب سمن عسل     </h3>
+                    <span class="price">  11 SR</span>
+                </div>
+
+                
+                <div class="menu-item">
+                    <img src="images/cold_appetizers/115.jpg" alt=" قائمة المعصوب">
+                    <h3> معصوب قشطة عسل     </h3>
+                    <span class="price">  15 SR</span>
+                </div>
+
+
+                
+                <div class="menu-item">
+                    <img src="images/cold_appetizers/113.jpg" alt=" قائمة المعصوب">
+                    <h3> معصوب قشطة      </h3>
+                    <span class="price">  12 SR</span>
+                </div>
+
+                <div class="menu-item">
+                    <img src="images/cold_appetizers/92.jpg" alt=" قائمة المعصوب">
+                    <h3> معصوب ملكي بالجبن دبل فخار   </h3>
+                    <span class="price">  21 SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/cold_appetizers/93.jpg" alt=" قائمة المعصوب">
+                    <h3> معصوب ملكي  دبل مع مكسرات فخار   </h3>
+                    <span class="price">  24 SR</span>
+                </div>
+
+
+
+
+                <div class="menu-item">
+                    <img src="images/cold_appetizers/1119.jpg" alt=" قائمة المعصوب">
+                    <h3> فتة ملكي     </h3>
+                    <span class="price">  11 SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/cold_appetizers/112.jpg" alt=" قائمة المعصوب">
+                    <h3> فتة تمر     </h3>
+                    <span class="price">  8 SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/cold_appetizers/96.jpg" alt=" قائمة المعصوب">
+                    <h3> فتة قشطة  عسل   </h3>
+                    <span class="price">  12 SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/cold_appetizers/99.jpg" alt=" قائمة المعصوب">
+                    <h3> معصوب قشطة     </h3>
+                    <span class="price">  10 SR</span>
+                </div>
+
+
+
+
+                <div class="menu-item">
+                    <img src="images/cold_appetizers/81.jpg" alt=" قائمة المعصوب">
+                    <h3> معصوب بالسمن والعسل     </h3>
+                    <span class="price">  11 SR</span>
+                </div>
+
+
+
+
+                <div class="menu-item">
+                    <img src="images/cold_appetizers/83.jpg" alt=" قائمة المعصوب">
+                    <h3> معصوب بالقشطة والعسل     </h3>
+                    <span class="price">  12 SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/cold_appetizers/6666.jpg" alt=" قائمة المعصوب">
+                    <h3> معصوب عادي      </h3>
+                    <span class="price">  8 SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/cold_appetizers/85.jpg" alt=" قائمة المعصوب">
+                    <h3> فتة تمر       </h3>
+                    <span class="price">  8 SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/cold_appetizers/86.jpg" alt=" قائمة المعصوب">
+                    <h3> فتة تمر قشطة      </h3>
+                    <span class="price">  12 SR</span>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </section>
+
+        <!-- Salads Section -->
+        <section id="salads" class="category">
+            <h2>🥗 قائمة المطبق</h2>
+            <div class="items-grid">
+                <div class="menu-item">
+                    <img src="images/salads/1.jpg" alt=" قائمة المطبق ">
+                    <h3>مطبق خضار  </h3>
+                    <span class="price">6 SR</span>
+                </div>
+
+
+
+
+                <div class="menu-item">
+                    <img src="images/salads/2.jpg" alt="قائمة المطبق ">
+                    <h3>مطبق لحم  </h3>
+                    <span class="price">8 SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/salads/3.jpg" alt="قائمة المطبق ">
+                    <h3>مطبق مالح عادي  </h3>
+                    <span class="price">9 SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/salads/4.jpg" alt=" قائمة المطبق">
+                    <h3>مطبق  جبن سايل  </h3>
+                    <span class="price">8 SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/salads/5.jpg" alt="قائمة المطبق ">
+                    <h3>مطبق  جبن مالح مع الخضار  </h3>
+                    <span class="price">7 SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/salads/6.jpg" alt=" قائمة المطبق">
+                    <h3>مطبق  موز حلو     </h3>
+                    <span class="price">7 SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/salads/7.jpg" alt=" قائمة المطبق">
+                    <h3>مطبق قشطة     </h3>
+                    <span class="price">7 SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/salads/9.jpg" alt="قائمة المطبق ">
+                    <h3>مطبق تونة     </h3>
+                    <span class="price">8 SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/salads/8.jpg" alt=" قائمة المطبق">
+                    <h3>مطبق جبن شيدر     </h3>
+                    <span class="price">8 SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/salads/11.jpg" alt="قائمة المطبق ">
+                    <h3>مطبق جبن مالح      </h3>
+                    <span class="price">7 SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/salads/12.jpg" alt=" قائمة المطبق">
+                    <h3>مطبق جبن شيدر  مع الخضار    </h3>
+                    <span class="price">8 SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/salads/123.jpg" alt="قائمة المطبق ">
+                    <h3>مطبق مارب    </h3>
+                    <span class="price">10 SR</span>
+                </div>
+
+
+            </div>
+        </section>
+
+        <!-- Soups Section -->
+        <section id="soups" class="category">
+            <h2>🍲 قائمة التميس</h2>
+            <div class="items-grid">
+
+
+
+
+                <div class="menu-item">
+                    <img src="images/soups/11.png" alt=" قائمة المطبق">
+                    <h3>تميس عادي  </h3>
+                    <span class="price">1 SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/soups/4.jpg" alt="قائمة المطبق ">
+                    <h3>تميس لبلب  </h3>
+                    <span class="price">1 SR</span>
+                </div>
+
+                <div class="menu-item">
+                    <img src="images/soups/2.jpg" alt="قائمة المطبق ">
+                    <h3>تميس جبن سكر  </h3>
+                    <span class="price">7 SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/soups/3.jpg" alt=" قائمة المطبق">
+                    <h3>تميس جبن   </h3>
+                    <span class="price">7 SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/soups/6.jpg" alt=" قائمة المطبق">
+                    <h3>هولي    </h3>
+                    <span class="price">1 SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/soups/7.jpg" alt="شوربة عدس">
+                    <h3>تميس سكر مع سمن   </h3>
+                    <span class="price">3 SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/soups/8.jpg" alt="قائمة المطبق ">
+                    <h3>تميس عادي سكر     </h3>
+                    <span class="price">2 SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/soups/9.jpg" alt="قائمة المطبق ">
+                    <h3>تميس بسكويت      </h3>
+                    <span class="price">2 SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/soups/10.jpg" alt="قائمة المطبق ">
+                    <h3>تميس سمن      </h3>
+                    <span class="price">3 SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/soups/111.jpg" alt="قائمة المطبق ">
+                    <h3>تميس بر      </h3>
+                    <span class="price">1 SR</span>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </section>
+
+        <!-- Eastern Dishes Section -->
+        <section id="eastern" class="category">
+            <h2>🍛   قائمة الخبز</h2>
+            <div class="items-grid">
+                <div class="menu-item">
+                    <img src="images/eastern/1.jpg" alt="قائمة الخبز ">
+                    <h3>  ملوح</h3>
+                    <span class="price">صغير 2 دبل 5  SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/eastern/2.jpg" alt="قائمة الخبز ">
+                    <h3>  ملوح دبل مع البيض</h3>
+                    <span class="price"> 7 SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/eastern/55.jpg" alt="قائمة الخبز ">
+                    <h3>  رطب   </h3>
+                    <span class="price"> 5 SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/eastern/5.jpg" alt="قائمة الخبز ">
+                    <h3>  رطب سمن وعسل  </h3>
+                    <span class="price"> 9 SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/eastern/11.jpg" alt="قائمة الخبز ">
+                    <h3>  رطب  قشطة وعسل  </h3>
+                    <span class="price"> 11  دبل 14 SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/eastern/6.jpg" alt="قائمة الخبز ">
+                    <h3>  كرس وعسل   </h3>
+                    <span class="price"> 9 SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/eastern/7.jpg" alt="قائمة الخبز ">
+                    <h3>  كرس   </h3>
+                    <span class="price"> 5 SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/eastern/13.jpg" alt="قائمة الخبز ">
+                    <h3>  مثلث   </h3>
+                    <span class="price"> 10 SR</span>
+                </div>
+
+                <div class="menu-item">
+                    <img src="images/eastern/14.jpg" alt="قائمة الخبز ">
+                    <h3>  ملوح سمن وعسل   </h3>
+                    <span class="price"> 4 SR</span>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Western Dishes Section -->
+        <section id="western" class="category">
+            <h2>🍝   قائمة السلطة</h2>
+            <div class="items-grid">
+                <div class="menu-item">
+                    <img src="images/western/1.jpg" alt="قائمة السلطة ">
+                    <h3>  سلطة خضار كبير</h3>
+                    <span class="price">كبير 10  صغير 5 SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/western/2.jpg" alt=" قائمة السلطة">
+                    <h3>  سلطة  جبن</h3>
+                    <span class="price">كبير 5  صغير 3 SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/western/3.jpg" alt=" قائمة السلطة">
+                    <h3>  سحاوق احمر عادي  </h3>
+                    <span class="price"> 3   SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/western/4.jpg" alt=" قائمة السلطة">
+                    <h3>  لبن خيار    </h3>
+                    <span class="price"> 8   SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/western/5.jpg" alt="قائمة السلطة ">
+                    <h3>  صحن حبحب     </h3>
+                    <span class="price"> 5   SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/western/6.jpg" alt="قائمة السلطة ">
+                    <h3>  صحن شمام     </h3>
+                    <span class="price"> 6   SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/western/7.jpg" alt="قائمة السلطة ">
+                    <h3>  مقبلات مشكل       </h3>
+                    <span class="price"> وسط 15  كبير 25   SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/western/8.jpg" alt="قائمة السلطة ">
+                    <h3>  تبولة</h3>
+                    <span class="price">   8  SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/western/9.jpg" alt="قائمة السلطة ">
+                    <h3>  بابا غنوج</h3>
+                    <span class="price">   8  SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/western/8.jpg" alt="قائمة السلطة ">
+                    <h3>  حمص </h3>
+                    <span class="price">   8  SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/western/10.jpeg" alt="قائمة السلطة ">
+                    <h3>  متبل </h3>
+                    <span class="price">   8  SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/western/12.jpg" alt="قائمة السلطة ">
+                    <h3>  سلطة زيتون </h3>
+                    <span class="price">   8  SR</span>
+                </div>
+
+
+
+
+                <div class="menu-item">
+                    <img src="images/western/13.jpg" alt="قائمة السلطة ">
+                    <h3>  فتوش  </h3>
+                    <span class="price">   8  SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/western/14.jpg" alt="قائمة السلطة ">
+                    <h3>  سلطة خضراء ورقية  </h3>
+                    <span class="price">   8  SR</span>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </section>
+
+        <!-- Grills Section -->
+        <section id="grills" class="category">
+            <h2>🔥 المشروبات الساخنة</h2>
+            <div class="items-grid">
+                <div class="menu-item">
+                    <img src="images/grills/1.jpg" alt="المشروبات ">
+                    <h3>  حليب عدني</h3>
+                    <span class="price">3 $</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/grills/2.jpg" alt="المشروبات ">
+                    <h3>  حليب شاهي</h3>
+                    <span class="price">3 SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/grills/3.jpg" alt="المشروبات ">
+                    <h3>    شاهي احمر</h3>
+                    <span class="price">2 SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/grills/4.jpg" alt="مشكل مشاوي">
+                    <h3>    شاهي احمر عدني</h3>
+                    <span class="price">2 SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/grills/5.jpg" alt="المشروبات ">
+                    <h3>    كافي  </h3>
+                    <span class="price">3 SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/grills/6.jpg" alt="المشروبات ">
+                    <h3>    كافي حليب </h3>
+                    <span class="price">3 SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/grills/7.jpg" alt="المشروبات ">
+                    <h3>    زنجبيل </h3>
+                    <span class="price">2 SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/grills/9.jpg" alt="المشروبات ">
+                    <h3>    زنجبيل حليب</h3>
+                    <span class="price">3 SR</span>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </section>
+
+        <!-- Seafood Section -->
+        <section id="seafood" class="category">
+            <h2>  المشروبات الباردة  </h2>
+            <div class="items-grid">
+                <div class="menu-item">
+                    <img src="images/seafood/1.jpg" alt="المشروبات ">
+                    <h3>لبن     </h3>
+                    <span class="price">صغير 2  وسط 3 كبير 10 SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/seafood/2.jpg" alt="المشروبات ">
+                    <h3>لبن القرية     </h3>
+                    <span class="price">  وسط 3 كبير 10 SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/seafood/3.jpg" alt="المشروبات ">
+                    <h3>زبادي  </h3>
+                    <span class="price">   3   SR</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <img src="images/seafood/4.jpg" alt="المشروبات ">
+                    <h3>بيبسي عائلي  </h3>
+                    <span class="price">   10   SR</span>
+                </div>
+
+
+
+                <div class="menu-item">
+                    <img src="images/seafood/5.jpg" alt="المشروبات ">
+                    <h3>بيبسي علب  </h3>
+                    <span class="price">   3   SR</span>
+                </div>
+
+
+
+
+                <div class="menu-item">
+                    <img src="images/seafood/6.jpg" alt="المشروبات ">
+                    <h3>ماء صغير   </h3>
+                    <span class="price">   نص ريال   SR</span>
+                </div>
+
+
+
+
+                <div class="menu-item">
+                    <img src="images/seafood/7.png" alt="المشروبات ">
+                    <h3>ماء كبير   </h3>
+                    <span class="price">   ريال    SR</span>
+                </div>
+
+
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Rating Modal -->
+    <div id="ratingModal" class="modal hidden">
+        <div class="modal-content">
+            <h3>تقييم الخدمة</h3>
+            <form id="ratingForm">
+                <input type="text" id="customerName" placeholder="اسمك" required>
+                <div class="stars">
+                    <span class="star" data-rating="1">⭐</span>
+                    <span class="star" data-rating="2">⭐</span>
+                    <span class="star" data-rating="3">⭐</span>
+                    <span class="star" data-rating="4">⭐</span>
+                    <span class="star" data-rating="5">⭐</span>
+                </div>
+                <textarea id="comment" placeholder="تعليقك (اختياري)"></textarea>
+                <button type="submit">إرسال التقييم</button>
+                <button type="button" onclick="closeModal()">إلغاء</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 قائمة طعام  مطاعم مارب للاكلات الشعبية. جميع الحقوق محفوظة. | تصميم حديث وأنيق لتجربة طعام لا تُنسى</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Register Service Worker for caching and offline functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    }, function(err) {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+
+        // Preload critical images
+        function preloadImages() {
+            const criticalImages = [
+                'images/breakfast/breakfast1.jpg',
+                'images/hot_appetizers/hot1.jpg',
+                'images/cold_appetizers/cold1.jpg',
+                'images/salads/salad1.jpg',
+                'images/eastern/eastern1.jpg',
+                'images/western/western1.jpg'
+            ];
+
+            criticalImages.forEach(src => {
+                const img = new Image();
+                img.src = src;
+            });
+        }
+
+        // Call preload function after page load
+        window.addEventListener('load', preloadImages);
+
+        // Optimize image loading with intersection observer
+        document.addEventListener('DOMContentLoaded', function() {
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            img.src = img.dataset.src || img.src;
+                            img.classList.remove('lazy');
+                            observer.unobserve(img);
+                        }
+                    });
+                });
+
+                document.querySelectorAll('img[data-src]').forEach(img => {
+                    imageObserver.observe(img);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+
